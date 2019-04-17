@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         fabMenu.close(true); // Cierra el fabMenu
         startActivity(new Intent(MainActivity.this, PedidosEnCursoActivity.class));
     }
+    /**
+     * Inicia la actividad PedidosFinalizadosActivity
+     *
+     * @param view
+     */
+    public void openFinalizados(View view){
+        fabMenu.close(true); // Cierra el fabMenu
+        startActivity(new Intent(MainActivity.this, PedidosFinalizadosActivity.class));
+    }
 
     /**
      * Muestra un AlerDialog para salir de la aplicación
