@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BaKKe</string>
+    <string name="action_settings">Settings</string>
+    <string name="fabEnCurso">Orders in progress</string>
+    <string name="fabFinalizados">" Finished orders"</string>
+    <string name="listaOrdenes">" Order list"</string>
+    <string name="cancelar">Cancel</string>
+    <string name="confirmacion">Yes</string>
+    <string name="exit">" Are you sure you want to leave BaKKe?"</string>
+</resources>
