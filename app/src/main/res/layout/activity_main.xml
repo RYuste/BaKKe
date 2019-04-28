@@ -46,6 +46,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="329dp"
+            android:layout_height="547dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/fabmenu"
             android:layout_width="match_parent"
@@ -81,15 +90,6 @@
                 app:fab_label="@string/fabEnCurso"
                 app:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="392dp"
-            android:layout_height="661dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>
