@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/logout2" />
 
     <TextView
-        android:id="@+id/textView_finalizados"
+        android:id="@+id/textView_detalles"
         android:layout_width="241dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"

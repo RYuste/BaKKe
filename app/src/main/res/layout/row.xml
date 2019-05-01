@@ -9,7 +9,7 @@
         android:id="@+id/TextView_enunciado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFB804"
+        android:background="#FABF2F"
         android:gravity="center"
         android:text="¡Pedido en espera!"
         android:textColor="#000000"

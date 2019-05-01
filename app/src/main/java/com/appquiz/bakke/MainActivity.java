@@ -133,13 +133,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(DB_Vacia == false){
             // Asocia el elemento de la lista con una acción al ser pulsado
-            /*adaptador.setOnClickListener(new View.OnClickListener() {
+            adaptador.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Acción al pulsar el elemento
                     int position = recyclerView.getChildAdapterPosition(v);
 
-                    Intent intent = new Intent(ListadoPreguntasActivity.this, NuevaEditaPreguntaActivity.class);
+                    Intent intent = new Intent(MainActivity.this, DetallesPedidoActivity.class);
 
                     // Creamos la información a pasar entre actividades
                     Bundle b = new Bundle();
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     // Iniciamos la actividad
                     startActivity(intent);
                 }
-            });*/
+            });
 
             // Asocia el Adaptador al RecyclerView
             recyclerView.setAdapter(adaptador);
