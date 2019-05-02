@@ -37,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // Toolbar toolbar = findViewById(R.id.toolbar);
-        // setSupportActionBar(toolbar);
-
-        //PRUEBA DE DATOS
-        //Repositorio.getRepositorio().consultaAñadirPedidoPRUEBA(myContext);
 
         fabMenu = (FloatingActionMenu) findViewById(R.id.fabmenu);
         fabMenu.setClosedOnTouchOutside(true); // Cierra el fabMenu al pulsar fuera de él
@@ -149,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtras(b);
                     // Iniciamos la actividad
                     startActivity(intent);
+                    overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
                 }
             });
 
