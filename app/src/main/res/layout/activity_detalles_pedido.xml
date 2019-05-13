@@ -60,34 +60,30 @@
             android:orientation="vertical"
             android:scrollbarSize="0dp">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/textView_fechaPedido"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="20px"
                 android:layout_marginTop="20px"
                 android:layout_marginRight="20px"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp">
+                android:layout_weight="1"
+                android:paddingLeft="5dp"
+                android:text="Fecha del pedido:"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView_fechaPedido"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Fecha del pedido:"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView_fechaPedidoText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/textView_fechaPedidoText"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20px"
+                android:layout_marginRight="20px"
+                android:layout_weight="1"
+                android:paddingLeft="5dp"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textView_cliente"
@@ -108,7 +104,6 @@
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20px"
-                android:layout_marginTop="20px"
                 android:layout_marginRight="20px"
                 android:layout_weight="1"
                 android:paddingLeft="5dp"
@@ -157,7 +152,7 @@
             <TextView
                 android:id="@+id/textView_ordenText"
                 android:layout_width="match_parent"
-                android:layout_height="250px"
+                android:layout_height="280px"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
                 android:layout_weight="1"

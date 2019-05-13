@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 exit();
             }
         });
+
+
     }
 
     /**
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             adaptador.borrarDatos();
         }
+
         MyLog.d(TAG, "Cerrando onResume...");
     }
 
