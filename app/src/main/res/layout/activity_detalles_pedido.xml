@@ -185,7 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Mapa de la ruta"
+                    android:text="Ubicación del cliente"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -194,7 +194,6 @@
                     android:id="@+id/mapView"
                     android:layout_width="328dp"
                     android:layout_height="331dp"
-                    android:foreground="@color/colorSecond"
                     tools:layout_editor_absoluteX="76dp"
                     tools:layout_editor_absoluteY="283dp" />
 

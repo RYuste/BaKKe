@@ -75,8 +75,8 @@ public class Repositorio {
 
         Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
 
-        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, direccion, orden) " +
-                "VALUES('02/11/1995', 'Rafael Yuste Jiménez', 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
+        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden) " +
+                "VALUES('02/11/1995', 'Rafael Yuste Jiménez', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
                 "para ver como que de largo y todo eso, to wapo, aver, jaja, xd.')");*/
 
         // Nos aseguramos de que existe al menos un registro
@@ -88,10 +88,12 @@ public class Repositorio {
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
+                double latitud = c.getDouble(c.getColumnIndex("latitud"));
+                double longitud = c.getDouble(c.getColumnIndex("longitud"));
                 String direccion = c.getString(c.getColumnIndex("direccion"));
                 String orden = c.getString(c.getColumnIndex("orden"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, direccion, orden);
+                Pedido p = new Pedido(id_pedido, fecha, cliente, latitud, longitud, direccion, orden);
                 listaPedidos.add(p);
             } while(c.moveToNext());
         }
@@ -120,10 +122,12 @@ public class Repositorio {
         if (c.moveToFirst()) {
             String fecha = c.getString(c.getColumnIndex("fecha"));
             String cliente = c.getString(c.getColumnIndex("nombre"));
+            double latitud = c.getDouble(c.getColumnIndex("latitud"));
+            double longitud = c.getDouble(c.getColumnIndex("longitud"));
             String direccion = c.getString(c.getColumnIndex("direccion"));
             String orden = c.getString(c.getColumnIndex("orden"));
 
-            p = new Pedido(fecha, cliente, direccion, orden);
+            p = new Pedido(fecha, cliente, latitud, longitud, direccion, orden);
         }
         db.close();
         MyLog.d(TAG, "Saliendo del método consultaListarPedidoID...");
@@ -136,32 +140,25 @@ public class Repositorio {
      *
      * @param p
      * @param myContext
-     * @return true o false
      */
-    public boolean consultaAñadirPedido(Pedido p, Context myContext){
+    public void consultaAñadirPedido(Pedido p, Context myContext){
         MyLog.d(TAG, "Entrando en consultaAñadirPedido...");
 
-        boolean correcto;
         DataBase db = new DataBase(myContext, constants.DB_NOMBRE, null, 1);
         SQLiteDatabase sqldb = db.getWritableDatabase();
 
         if(sqldb != null){
-            sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, direccion, orden) " +
-                    "VALUES('"+p.getFecha()+"', '"+p.getNombre()+"', '"+p.getDireccion()+"', '"+p.getOrden()+"')");
-
-            correcto = true;
+            sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden) " +
+                    "VALUES('"+p.getFecha()+"', '"+p.getNombre()+"', '"+p.getLatitud()+"', '"+p.getLongitud()+"', " +
+                    "'"+p.getDireccion()+"', '"+p.getOrden()+"')");
 
             MyLog.d(TAG, "Saliendo de consultaAñadirPedido...");
         }else {
-            correcto = false;
-
             MyLog.d(TAG, "Error null en consultaAñadirPedido...");
         }
         db.close();
 
         MyLog.d(TAG, "Saliendo del método consultaAñadirPedido...");
-        return correcto;
     }
-
 
 }

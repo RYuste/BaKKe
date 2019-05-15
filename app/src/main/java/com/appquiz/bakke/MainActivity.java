@@ -1,5 +1,6 @@
 package com.appquiz.bakke;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +13,19 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.clans.fab.FloatingActionMenu;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -48,8 +60,53 @@ public class MainActivity extends AppCompatActivity {
                 exit();
             }
         });
+    }
 
+    /**
+     * Invoca al servicio REST llamando al JSON
+     */
+    private void invocarServicio(){
+        String DATA_URL = "http://192.168.1.35/BaKKeJSON/pedidos.json"; // http://192.168.102.87:3000/pedidos
 
+        final ProgressDialog loading = ProgressDialog.show(this, "Actualizando pedidos", "Cargando...", false, false);
+
+        // Método de la libreria Volley
+        JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.GET,
+                DATA_URL, null,
+                new Response.Listener<JSONObject>(){
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            loading.dismiss();
+
+                            ArrayList<String> pedidoJSON = new ArrayList<String>();
+                            JSONArray lista = response.optJSONArray("pedidos");
+
+                            for (int i=0; i<lista.length(); i++){
+                                JSONObject json_data = lista.getJSONObject(i);
+                                /*String pedido = json_data.getString("fecha") +" "+ json_data.getString("nombre") +" "+
+                                        json_data.getString("direccion") +" "+ json_data.getString("orden");
+
+                                pedidoJSON.add(pedido);*/
+
+                                /*Pedido p = new Pedido(json_data.getString("fecha"), json_data.getString("nombre"),
+                                        json_data.getString("direccion"), json_data.getString("orden"));
+
+                                Repositorio.getRepositorio().consultaAñadirPedido(p, myContext);*/
+                            }
+                        }catch(JSONException error) {
+                            Toast.makeText(getApplicationContext(), "Error JSON: " +error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        loading.dismiss();
+                        Toast.makeText(getApplicationContext(), "Error request: " +error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jsonObRq);
     }
 
     /**
@@ -118,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Almacenamos el contexto de la actividad para utilizar en las clases internas
         myContext = this;
+
+        //invocarServicio(); // Invocando al servicio REST
 
         final ArrayList<Pedido> listaPedidos = Repositorio.getRepositorio().consultaListarPedidos(myContext);
 

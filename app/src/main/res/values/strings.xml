@@ -7,4 +7,5 @@
     <string name="exit">¿Seguro que quiéres salir de BaKKe?</string>
     <string name="confirmacion">Sí</string>
     <string name="cancelar">Cancelar</string>
+    <string name="title_activity_map">Map</string>
 </resources>
