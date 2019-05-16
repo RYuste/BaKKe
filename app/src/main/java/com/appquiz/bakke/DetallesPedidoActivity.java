@@ -12,10 +12,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -94,34 +92,44 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         if (savedInstanceState != null) {
             mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
         }
-
         mapa.onCreate(mapViewBundle);
         mapa.getMapAsync(this);
 
-        // Mapa de la ruta
-        /*aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
+        // Abre el MapActivity para mostrar la ruta
+        aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
         aceptarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetallesPedidoActivity.this, MapActivity.class);
+
+                /* ELIMINAR DE LA BASE DE DATOS EL PEDIDO SELECCIONADO. AGREGARLO A UN NUEVO ARRAY PARA
+                    ALMACENARLO EN OTRO RECYVLERVIEW DE PEDIDOS EN CURSO */
+
                 startActivity(intent);
+                finish();
             }
-        });*/
+        });
 
         MyLog.d(TAG, "Cerrando onCreate...");
     }
 
     @Override
+    /**
+     * Crea la ubicación en el mapView mediante latitud y longitud
+     */
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
         gMap.setMinZoomPreference(15);
 
         LatLng ubicacion = new LatLng(pedidoID.getLatitud(), pedidoID.getLongitud());
+
         gMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
         gMap.addMarker(new MarkerOptions()
                 .position(ubicacion)
                 .title(pedidoID.getDireccion())
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+
+        gMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     @Override

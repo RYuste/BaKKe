@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">BaKKe</string>
-    <string name="action_settings">Ajustes</string>
+    <string name="action_settings">Finalizar pedido</string>
     <string name="fabEnCurso">Pedidos en curso</string>
     <string name="fabFinalizados">Pedidos finalizados</string>
     <string name="listaOrdenes">Lista de pedidos</string>
     <string name="exit">¿Seguro que quiéres salir de BaKKe?</string>
     <string name="confirmacion">Sí</string>
     <string name="cancelar">Cancelar</string>
-    <string name="title_activity_map">Map</string>
+    <string name="title_activity_map">Ruta del Pedido</string>
 </resources>
