@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return aceptar;
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {

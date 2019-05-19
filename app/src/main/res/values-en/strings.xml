@@ -11,4 +11,5 @@
     <string name="title_activity_map">" Route of the Order"</string>
     <string name="permisosNO">" Denied location permissions. You must accept them to use the application."</string>
     <string name="permisosYES">" Location permission accepted."</string>
+    <string name="rechazarPedido">Are you sure you want to reject this order?</string>
 </resources>

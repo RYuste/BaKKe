@@ -1,8 +1,11 @@
 package com.appquiz.bakke;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +24,12 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
 
     private String TAG = "DetallesPedidoActivity";
     private Context myContext;
+    private Bundle bundle;
     private Pedido pedidoID;
 
     private ImageButton btn_atras;
     private TextView fecha, cliente, direccion, orden;
-    private Button aceptarPedido;
+    private Button aceptarPedido, rechazarPedido;
 
     private MapView mapa;
     private GoogleMap gMap;
@@ -66,7 +70,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         myContext = this;
 
         // Recuperamos la información pasada en el intent
-        final Bundle bundle = this.getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
 
         fecha = (TextView) findViewById(R.id.textView_fechaPedidoText);
         cliente = (TextView) findViewById(R.id.textView_clienteText);
@@ -94,22 +98,6 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         mapa.onCreate(mapViewBundle);
         mapa.getMapAsync(this);
 
-        // Abre el MapActivity para mostrar la ruta
-        aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
-        aceptarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(DetallesPedidoActivity.this, MapActivity.class);
-
-                /* ELIMINAR DE LA BASE DE DATOS EL PEDIDO SELECCIONADO. AGREGARLO A UN NUEVO ARRAY PARA
-                    ALMACENARLO EN OTRO RECYVLERVIEW DE PEDIDOS EN CURSO */
-
-                //startActivity(intent);
-                finish();
-                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
-            }
-        });
-
         MyLog.d(TAG, "Cerrando onCreate...");
     }
 
@@ -130,6 +118,37 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
 
         gMap.getUiSettings().setZoomControlsEnabled(true);
+    }
+
+    /**
+     * Muestra un AlerDialog para salir de la aplicación
+     */
+    public void exit(){
+        Log.i("ActionBar", "Salir de la aplicación");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(DetallesPedidoActivity.this);
+        builder.setMessage(R.string.rechazarPedido);
+
+        builder.setPositiveButton(R.string.confirmacion, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                /*
+                ENVIAR PETICIÓN PUT RECHAZANDO EL PEDIDO
+                 */
+
+                // Elimina el pedido de la base de datos
+                Repositorio.getRepositorio().consultaEliminarPedido(myContext, bundle.getInt("ID"));
+
+                finish();
+                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
+            }
+        }).setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        }).show(); //show alert dialog
     }
 
     @Override
@@ -154,9 +173,31 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
     @Override
     protected void onResume() {
         MyLog.d(TAG, "Iniciando onResume...");
-
         super.onResume();
         mapa.onResume();
+
+        // Aceptar Pedido
+        aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
+        aceptarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /* ELIMINAR DE LA BASE DE DATOS EL PEDIDO SELECCIONADO. AGREGARLO A UN NUEVO ARRAY PARA
+                    ALMACENARLO EN OTRO RECYVLERVIEW DE PEDIDOS EN CURSO */
+
+                finish();
+                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
+            }
+        });
+
+        // Rechazar Pedido
+        rechazarPedido = (Button) findViewById(R.id.button_rechazarPedido);
+        rechazarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exit();
+            }
+        });
 
         MyLog.d(TAG, "Cerrando onResume...");
     }

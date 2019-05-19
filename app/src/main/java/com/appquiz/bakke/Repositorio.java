@@ -161,4 +161,27 @@ public class Repositorio {
         MyLog.d(TAG, "Saliendo del método consultaAñadirPedido...");
     }
 
+    /**
+     * Elimina un pedido por id
+     *
+     * @param myContext
+     * @param id
+     * @return true o false
+     */
+    public void consultaEliminarPedido(Context myContext, int id){
+        MyLog.d(TAG, "Entrando en EliminarPedido...");
+
+        DataBase db = new DataBase(myContext, constants.DB_NOMBRE, null, 1);
+        SQLiteDatabase sqldb = db.getWritableDatabase();
+
+        if(sqldb != null){
+            sqldb.execSQL("DELETE FROM Pedido WHERE id_pedido = '"+id+"'");
+
+            MyLog.d(TAG, "Saliendo de EliminarPedido...");
+        }
+        db.close();
+
+        MyLog.d(TAG, "Saliendo del método EliminarPedido...");
+    }
+
 }
