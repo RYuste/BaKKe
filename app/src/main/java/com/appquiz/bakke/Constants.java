@@ -7,5 +7,6 @@ public class Constants {
 
     public static final String DB_NOMBRE = "DBPedido";
     public static final String DB_CHECKEMPTY = "SELECT count(*) FROM Pedido";
-    public static final String DB_LISTAR_PEDIDOS = "SELECT * FROM Pedido";
+    public static final String DB_LISTAR_PEDIDOS = "SELECT * FROM Pedido"; //estado
+    public static final int CODE_ACCESS_COARSE_LOCATION = 123;
 }

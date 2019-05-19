@@ -8,4 +8,6 @@
     <string name="confirmacion">Sí</string>
     <string name="cancelar">Cancelar</string>
     <string name="title_activity_map">Ruta del Pedido</string>
+    <string name="permisosYES">Permisos de ubicación aceptados.</string>
+    <string name="permisosNO">Permisos de ubicación denegados. Debes aceptarlos para usar la aplicación.</string>
 </resources>

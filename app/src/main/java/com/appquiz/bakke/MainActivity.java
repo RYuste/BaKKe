@@ -1,10 +1,15 @@
 package com.appquiz.bakke;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -60,6 +65,48 @@ public class MainActivity extends AppCompatActivity {
                 exit();
             }
         });
+    }
+
+    /**
+     * Método que contiene los permisos de ubicación
+     *
+     * @return true o false
+     */
+    public boolean permisosUbicacion() {
+        boolean aceptar = true;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permiso denegado
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, Constants.CODE_ACCESS_COARSE_LOCATION);
+                // Una vez que se pide aceptar o rechazar el permiso se ejecuta el método "onRequestPermissionsResult" para manejar la respuesta
+                // Si el usuario marca "No preguntar más" no se volverá a mostrar este diálogo
+                aceptar = false;
+            } else {
+                Toast.makeText(this, R.string.permisosNO, Toast.LENGTH_LONG).show();
+                aceptar = false;
+            }
+        }
+        return aceptar;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case Constants.CODE_ACCESS_COARSE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permiso aceptado
+                    Toast.makeText(this, R.string.permisosYES, Toast.LENGTH_SHORT).show();
+                } else {
+                    // Permiso rechazado
+                    Toast.makeText(this, R.string.permisosNO, Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                return;
+            }
+        }
     }
 
     /**
@@ -172,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         MyLog.d(TAG, "Iniciando onResume...");
         super.onResume();
+
+        permisosUbicacion(); // Si se niegan los permisos se cierra la app
 
         // Almacenamos el contexto de la actividad para utilizar en las clases internas
         myContext = this;

@@ -9,4 +9,6 @@
     <string name="confirmacion">Yes</string>
     <string name="exit">" Are you sure you want to leave BaKKe?"</string>
     <string name="title_activity_map">" Route of the Order"</string>
+    <string name="permisosNO">" Denied location permissions. You must accept them to use the application."</string>
+    <string name="permisosYES">" Location permission accepted."</string>
 </resources>

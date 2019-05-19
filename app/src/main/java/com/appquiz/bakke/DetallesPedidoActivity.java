@@ -1,7 +1,6 @@
 package com.appquiz.bakke;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -100,13 +99,14 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         aceptarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetallesPedidoActivity.this, MapActivity.class);
+                //Intent intent = new Intent(DetallesPedidoActivity.this, MapActivity.class);
 
                 /* ELIMINAR DE LA BASE DE DATOS EL PEDIDO SELECCIONADO. AGREGARLO A UN NUEVO ARRAY PARA
                     ALMACENARLO EN OTRO RECYVLERVIEW DE PEDIDOS EN CURSO */
 
-                startActivity(intent);
+                //startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
             }
         });
 
