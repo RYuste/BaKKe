@@ -9,10 +9,10 @@
         android:id="@+id/TextView_enunciado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorDisabledPressed"
         android:gravity="center"
         android:text="Pedido Finalizado"
-        android:textColor="#ffffff"
+        android:textColor="@color/colorSecond"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="Fecha: "
-            android:textColor="@color/colorSecondPressed"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="Cliente: "
-            android:textColor="@color/colorSecondPressed"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="Dirección: "
-            android:textColor="@color/colorSecondPressed"
+            android:textColor="@color/colorAccent"
             android:textSize="15sp" />
 
         <TextView

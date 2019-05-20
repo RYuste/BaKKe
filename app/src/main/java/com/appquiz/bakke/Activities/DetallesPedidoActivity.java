@@ -128,6 +128,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 finalizarPedido.setVisibility(View.VISIBLE);
                 finalizarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
                 finalizarPedido.setTextColor(R.color.colorDisabledPressed);
+                finalizarPedido.setText("PEDIDO FINALIZADO");
 
                 rechazarPedido.setEnabled(false);
                 rechazarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
