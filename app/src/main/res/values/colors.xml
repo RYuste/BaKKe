@@ -5,4 +5,6 @@
     <color name="colorSecond">#FFB804</color>
     <color name="colorSecondPressed">#FFAA00</color>
     <color name="colorAccent">#4825BA</color>
+    <color name="colorDisabled">#FFCAC7D5</color>
+    <color name="colorDisabledPressed">#111111</color>
 </resources>

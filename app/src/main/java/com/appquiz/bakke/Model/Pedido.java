@@ -1,6 +1,4 @@
-package com.appquiz.bakke;
-
-import java.util.Date;
+package com.appquiz.bakke.Model;
 
 /**
  * Clase Pedido
@@ -14,6 +12,7 @@ public class Pedido {
     private double longitud;
     private String direccion;
     private String orden;
+    private int estado; // 0 por defecto, 1 en curso, 2 finalizado, 3 rechazado
 
     /**
      * Constructor 1
@@ -23,8 +22,9 @@ public class Pedido {
      * @param nombre
      * @param direccion
      * @param orden
+     * @param estado
      */
-    public Pedido(int id, String fecha, String nombre, double latitud, double longitud, String direccion, String orden) {
+    public Pedido(int id, String fecha, String nombre, double latitud, double longitud, String direccion, String orden, int estado) {
         this.id = id;
         this.fecha = fecha;
         this.nombre = nombre;
@@ -32,6 +32,7 @@ public class Pedido {
         this.longitud = longitud;
         this.direccion= direccion;
         this.orden = orden;
+        this.estado = estado;
     }
 
     /**
@@ -41,14 +42,16 @@ public class Pedido {
      * @param nombre
      * @param direccion
      * @param orden
+     * @param estado
      */
-    public Pedido(String fecha, String nombre, double latitud, double longitud, String direccion, String orden) {
+    public Pedido(String fecha, String nombre, double latitud, double longitud, String direccion, String orden, int estado) {
         this.fecha = fecha;
         this.nombre = nombre;
         this.latitud = latitud;
         this.longitud = longitud;
         this.direccion= direccion;
         this.orden = orden;
+        this.estado = estado;
     }
 
     public int getId() {
@@ -100,4 +103,10 @@ public class Pedido {
         this.orden = orden;
     }
 
+    public int getEstado() {
+        return estado;
+    }
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
 }

@@ -1,4 +1,4 @@
-package com.appquiz.bakke;
+package com.appquiz.bakke.Activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +25,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.appquiz.bakke.Constants;
+import com.appquiz.bakke.MyLog;
+import com.appquiz.bakke.Model.Pedido;
+import com.appquiz.bakke.Adapters.PedidosAdapter;
+import com.appquiz.bakke.R;
+import com.appquiz.bakke.Model.Repositorio;
 import com.github.clans.fab.FloatingActionMenu;
 
 import org.json.JSONArray;
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String TAG = "MainActivity";
     private Context myContext;
+
     FloatingActionMenu fabMenu;
     public ImageButton btn_exit;
 

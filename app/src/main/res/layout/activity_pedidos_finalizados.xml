@@ -5,7 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screenmain"
-    tools:context=".PedidosFinalizadosActivity">
+    tools:context=".Activities.PedidosFinalizadosActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_finalizados"
+        android:layout_width="329dp"
+        android:layout_height="547dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButton_atras"

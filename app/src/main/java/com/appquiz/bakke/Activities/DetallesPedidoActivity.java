@@ -1,17 +1,24 @@
-package com.appquiz.bakke;
+package com.appquiz.bakke.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.appquiz.bakke.MyLog;
+import com.appquiz.bakke.Model.Pedido;
+import com.appquiz.bakke.R;
+import com.appquiz.bakke.Model.Repositorio;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -26,10 +33,12 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
     private Context myContext;
     private Bundle bundle;
     private Pedido pedidoID;
+    private int estado;
 
     private ImageButton btn_atras;
     private TextView fecha, cliente, direccion, orden;
-    private Button aceptarPedido, rechazarPedido;
+
+    private Button aceptarPedido, finalizarPedido, rechazarPedido;
 
     private MapView mapa;
     private GoogleMap gMap;
@@ -48,6 +57,8 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         return super.onKeyDown(keyCode, event);
     }
 
+    @SuppressLint("ResourceAsColor")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MyLog.d(TAG, "Iniciando onCreate...");
@@ -86,6 +97,50 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
             cliente.setText(pedidoID.getNombre());
             direccion.setText(pedidoID.getDireccion());
             orden.setText(pedidoID.getOrden());
+
+            // Dependiendo del estado habilita unos botones u otros
+            estado = pedidoID.getEstado();
+
+            aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
+            finalizarPedido = (Button) findViewById(R.id.button_finalizarPedido);
+            rechazarPedido = (Button) findViewById(R.id.button_rechazarPedido);
+
+            Drawable img = myContext.getResources().getDrawable(R.drawable.borrar_disabled);
+
+            // Pedido en Curso
+            if(estado == 1){
+                aceptarPedido.setEnabled(false);
+                aceptarPedido.setVisibility(View.INVISIBLE);
+
+                finalizarPedido.setEnabled(true);
+                finalizarPedido.setVisibility(View.VISIBLE);
+
+                rechazarPedido.setEnabled(false);
+                rechazarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
+                rechazarPedido.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+
+            // Pedido finalizado
+            }else if(estado == 2){
+                aceptarPedido.setEnabled(false);
+                aceptarPedido.setVisibility(View.INVISIBLE);
+
+                finalizarPedido.setEnabled(false);
+                finalizarPedido.setVisibility(View.VISIBLE);
+                finalizarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
+                finalizarPedido.setTextColor(R.color.colorDisabledPressed);
+
+                rechazarPedido.setEnabled(false);
+                rechazarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
+                rechazarPedido.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            }else{
+                aceptarPedido.setEnabled(true);
+                aceptarPedido.setVisibility(View.VISIBLE);
+
+                finalizarPedido.setEnabled(false);
+                finalizarPedido.setVisibility(View.INVISIBLE);
+
+                rechazarPedido.setEnabled(true);
+            }
         }
 
         /*--------------------------------------------------------*/
@@ -107,7 +162,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
      */
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        gMap.setMinZoomPreference(15);
+        gMap.setMinZoomPreference(14);
 
         LatLng ubicacion = new LatLng(pedidoID.getLatitud(), pedidoID.getLongitud());
 
@@ -121,11 +176,9 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
     }
 
     /**
-     * Muestra un AlerDialog para salir de la aplicación
+     * Muestra un AlerDialog para rechazar un pedido
      */
     public void exit(){
-        Log.i("ActionBar", "Salir de la aplicación");
-
         AlertDialog.Builder builder = new AlertDialog.Builder(DetallesPedidoActivity.this);
         builder.setMessage(R.string.rechazarPedido);
 
@@ -182,8 +235,24 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
             @Override
             public void onClick(View v) {
 
-                /* ELIMINAR DE LA BASE DE DATOS EL PEDIDO SELECCIONADO. AGREGARLO A UN NUEVO ARRAY PARA
-                    ALMACENARLO EN OTRO RECYVLERVIEW DE PEDIDOS EN CURSO */
+                // Modifica el estado del pedido para almacenarlo en Pedidos en Curso (1)
+                estado = 1;
+                Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
+
+                finish();
+                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
+            }
+        });
+
+        // Finalizar Pedido
+        finalizarPedido = (Button) findViewById(R.id.button_finalizarPedido);
+        finalizarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Modifica el estado del pedido para almacenarlo en Pedidos Finalizados (2)
+                estado = 2;
+                Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
 
                 finish();
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad

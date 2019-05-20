@@ -1,4 +1,4 @@
-package com.appquiz.bakke;
+package com.appquiz.bakke.Model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -8,11 +8,11 @@ import android.support.annotation.Nullable;
 /**
  * Clase que crea la Base de Datos para almacenar los pedidos finalizados
  */
-public class DataBase  extends SQLiteOpenHelper {
+public class DataBase extends SQLiteOpenHelper {
 
-    //Sentencia SQL para crear la tabla Pedido
+    // Sentencia SQL para crear la tabla Pedido
     String sqlCreate = "CREATE TABLE Pedido (id_pedido INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, fecha TEXT, nombre TEXT, " +
-            "latitud DOUBLE, longitud DOUBLE, direccion TEXT, orden TEXT)";
+            "latitud DOUBLE, longitud DOUBLE, direccion TEXT, orden TEXT, estado INTEGER)";
 
     /**
      * Constructor

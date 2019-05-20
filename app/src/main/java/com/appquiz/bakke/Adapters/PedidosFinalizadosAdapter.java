@@ -1,4 +1,4 @@
-package com.appquiz.bakke;
+package com.appquiz.bakke.Adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.appquiz.bakke.Model.Pedido;
+import com.appquiz.bakke.R;
+
 import java.util.ArrayList;
 
 /**
@@ -13,7 +17,7 @@ import java.util.ArrayList;
  * de los acontecimientos que va a mostrar
  * el RecyclerView
  */
-public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoViewHolder>
+public class PedidosFinalizadosAdapter extends RecyclerView.Adapter<PedidosFinalizadosAdapter.PedidoFinalizadoViewHolder>
         implements View.OnClickListener{
 
     private ArrayList<Pedido> items;
@@ -24,19 +28,19 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
      *  Se implementa el ViewHolder que se encargará
      *  de almacenar la vista del elemento y sus datos
      */
-    public static class PedidoViewHolder extends RecyclerView.ViewHolder {
+    public static class PedidoFinalizadoViewHolder extends RecyclerView.ViewHolder {
         private TextView nombre;
         private TextView fecha;
         private TextView direccion;
 
-        public PedidoViewHolder(View itemView) {
+        public PedidoFinalizadoViewHolder(View itemView) {
             super(itemView);
             nombre = (TextView) itemView.findViewById(R.id.TextView_nombre);
             fecha = (TextView) itemView.findViewById(R.id.TextView_fecha);
             direccion = (TextView) itemView.findViewById(R.id.TextView_direccion);
         }
 
-        public void PedidoBind(Pedido item) {
+        public void PedidoFinalizadoBind(Pedido item) {
             nombre.setText(item.getNombre());
             fecha.setText(item.getFecha());
             direccion.setText(item.getDireccion());
@@ -48,7 +52,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
      *
      * @param items
      */
-    public PedidosAdapter(@NonNull ArrayList<Pedido> items) {
+    public PedidosFinalizadosAdapter(@NonNull ArrayList<Pedido> items) {
         this.items = items;
     }
 
@@ -59,12 +63,12 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
      * para los elementos de la colección.
      * Infla la vista del layout, crea y devuelve el objeto ViewHolder
      */
-    public PedidoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public PedidosFinalizadosAdapter.PedidoFinalizadoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View row = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.row, viewGroup, false);
+                .inflate(R.layout.row_finalizado, viewGroup, false);
         row.setOnClickListener(this);
 
-        PedidoViewHolder pvh = new PedidoViewHolder(row);
+        PedidosFinalizadosAdapter.PedidoFinalizadoViewHolder pvh = new PedidosFinalizadosAdapter.PedidoFinalizadoViewHolder(row);
         return pvh;
     }
 
@@ -72,9 +76,9 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
     /**
      * Se encarga de actualizar los datos de un ViewHolder ya existente.
      */
-    public void onBindViewHolder(@NonNull PedidoViewHolder pedidoViewHolder, int i) {
+    public void onBindViewHolder(@NonNull PedidosFinalizadosAdapter.PedidoFinalizadoViewHolder pedidoFinalizadoViewHolder, int i) {
         Pedido item = items.get(i);
-        pedidoViewHolder.PedidoBind(item);
+        pedidoFinalizadoViewHolder.PedidoFinalizadoBind(item);
     }
 
     @Override

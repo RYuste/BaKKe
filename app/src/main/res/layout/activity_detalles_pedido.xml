@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/screendetalles"
-    tools:context=".DetallesPedidoActivity">
+    tools:context=".Activities.DetallesPedidoActivity">
 
     <ImageButton
         android:id="@+id/imageButton_atras"
@@ -197,15 +197,35 @@
                     tools:layout_editor_absoluteX="76dp"
                     tools:layout_editor_absoluteY="283dp" />
 
-                <LinearLayout
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/button_finalizarPedido"
+                        android:layout_width="265dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="FINALIZAR PEDIDO"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/colorSecond"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                    <Button
                         android:id="@+id/button_aceptarPedido"
-                        android:layout_width="252dp"
-                        android:layout_height="61dp"
+                        android:layout_width="265dp"
+                        android:layout_height="60dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
@@ -217,33 +237,32 @@
                         app:backgroundTint="@color/colorSecond"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.276"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.035" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <Button
                         android:id="@+id/button_rechazarPedido"
-                        android:layout_width="70dp"
+                        android:layout_width="53dp"
                         android:layout_height="60dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:text="x"
-                        android:textColor="@color/colorPrimary"
+                        android:drawableLeft="@drawable/borrar"
+                        android:textColor="@color/colorSecond"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:backgroundTint="@color/colorSecond"
+                        app:backgroundTint="@color/colorPrimary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.276"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.035" />
+                        app:layout_constraintVertical_bias="0.0" />
 
-                </LinearLayout>
+                </android.support.constraint.ConstraintLayout>
 
             </LinearLayout>
 

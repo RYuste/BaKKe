@@ -1,9 +1,12 @@
-package com.appquiz.bakke;
+package com.appquiz.bakke.Activities;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.appquiz.bakke.MyLog;
+import com.appquiz.bakke.R;
 
 public class SplashScreen extends AppCompatActivity {
 
