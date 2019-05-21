@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +36,8 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
     private Bundle bundle;
     private Pedido pedidoID;
     private int estado;
+
+    private boolean okFinalizar;
 
     private ImageButton btn_atras;
     private TextView fecha, cliente, direccion, orden;
@@ -128,7 +132,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 finalizarPedido.setVisibility(View.VISIBLE);
                 finalizarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
                 finalizarPedido.setTextColor(R.color.colorDisabledPressed);
-                finalizarPedido.setText("PEDIDO FINALIZADO");
+                finalizarPedido.setText(R.string.pedFinalizado);
 
                 rechazarPedido.setEnabled(false);
                 rechazarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
@@ -240,7 +244,15 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 estado = 1;
                 Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
 
-                finish();
+                Snackbar.make(v, R.string.pedidoAceptado, Snackbar.LENGTH_LONG)
+                        .setActionTextColor(getResources().getColor(R.color.colorSecond))
+                        .setAction("Ok", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        }).show();
+
+                esperarYCerrar();
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
             }
         });
@@ -250,12 +262,19 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 // Modifica el estado del pedido para almacenarlo en Pedidos Finalizados (2)
                 estado = 2;
                 Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
 
-                finish();
+                Snackbar.make(v, R.string.pedidoFinalizado, Snackbar.LENGTH_LONG)
+                        .setActionTextColor(getResources().getColor(R.color.colorSecond))
+                        .setAction("Ok", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                            }
+                        }).show();
+
+                esperarYCerrar();
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
             }
         });
@@ -270,6 +289,19 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         });
 
         MyLog.d(TAG, "Cerrando onResume...");
+    }
+
+    /**
+     * Espera y cierra la actividad tras los milisegundos indicados
+     */
+    public void esperarYCerrar() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                // acciones que se ejecutan tras los milisegundos
+                finish();
+            }
+        }, 3000);
     }
 
     @Override

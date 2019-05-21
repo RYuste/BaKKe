@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BaKKe</string>
-    <string name="action_settings">" Finish order"</string>
+    <string name="finalizarPed">Finish order</string>
     <string name="fabEnCurso">Orders in progress</string>
-    <string name="fabFinalizados">" Finished orders"</string>
-    <string name="listaOrdenes">" Order list"</string>
+    <string name="fabFinalizados">Finished orders</string>
+    <string name="listaOrdenes">Order list</string>
     <string name="cancelar">Cancel</string>
     <string name="confirmacion">Yes</string>
-    <string name="exit">" Are you sure you want to leave BaKKe?"</string>
-    <string name="title_activity_map">" Route of the Order"</string>
-    <string name="permisosNO">" Denied location permissions. You must accept them to use the application."</string>
-    <string name="permisosYES">" Location permission accepted."</string>
+    <string name="exit">Are you sure you want to leave BaKKe?</string>
+    <string name="title_activity_map">Route of the Order</string>
+    <string name="permisosNO">Denied location permissions. You must accept them to use the application.</string>
+    <string name="permisosYES">Location permission accepted.</string>
     <string name="rechazarPedido">Are you sure you want to reject this order?</string>
+    <string name="pedidoAceptado">You have accepted the order. You can check it again in \"Orders in progress\".</string>
+    <string name="pedidoFinalizado">"You have finished the order. You can check it again in \"Orders finished\". "</string>
+    <string name="pedFinalizado">"Order completed"</string>
+    <string name="pedEnEspera">Order on hold!</string>
+    <string name="pedEnCurso">"Order in progress... "</string>
+    <string name="fecha">"Date: "</string>
+    <string name="cliente">"Client: "</string>
+    <string name="direccion">"Address: "</string>
+    <string name="fechaDetalles">Order date:</string>
+    <string name="clienteDetalles">"Customer name:"</string>
+    <string name="orden">Order:</string>
+    <string name="ubicacionCliente">Customer location</string>
+    <string name="detallesPedido">Order details</string>
+    <string name="aceptarPed">Accept order</string>
+    <string name="aceptarFinPed">Are you sure you want to finalize this order?</string>
 </resources>

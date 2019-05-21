@@ -83,7 +83,7 @@ public class Repositorio {
         Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
 
         /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden, estado) " +
-                "VALUES('02/11/1995', 'Rafael Yuste Jiménez', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
+                "VALUES('02/11/1995', 'Fulanito de Copas', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
                 "para ver como que de largo y todo eso, to wapo, aver, jaja, xd.', 0)");*/
 
         // Nos aseguramos de que existe al menos un registro
@@ -118,7 +118,7 @@ public class Repositorio {
      * Añade todos los pedidos en curso creados de la Base de Datos en un ArrayList y lo devuelve
      *
      * @param myContext
-     * @return listaPedidos
+     * @return listaPedidosEnCurso
      */
     public ArrayList<Pedido> consultaListarPedidosEnCurso(Context myContext){
         MyLog.d(TAG, "Entrando en consultaListarPedidos...");
@@ -127,10 +127,6 @@ public class Repositorio {
         SQLiteDatabase sqldb = db.getWritableDatabase();
 
         Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
-
-        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden, estado) " +
-                "VALUES('02/11/1995', 'Rafael Yuste Jiménez', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
-                "para ver como que de largo y todo eso, to wapo, aver, jaja, xd.', 1)");*/
 
         // Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
@@ -164,7 +160,7 @@ public class Repositorio {
      * Añade todos los pedidos finalizados creados de la Base de Datos en un ArrayList y lo devuelve
      *
      * @param myContext
-     * @return listaPedidos
+     * @return listaPedidosFinalizados
      */
     public ArrayList<Pedido> consultaListarPedidosFinalizados(Context myContext){
         MyLog.d(TAG, "Entrando en consultaListarPedidos...");
@@ -173,10 +169,6 @@ public class Repositorio {
         SQLiteDatabase sqldb = db.getWritableDatabase();
 
         Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
-
-        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden, estado) " +
-                "VALUES('02/11/1995', 'Rafael Yuste Jiménez', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
-                "para ver como que de largo y todo eso, to wapo, aver, jaja, xd.', 2)");*/
 
         // Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {

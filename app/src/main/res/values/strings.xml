@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">BaKKe</string>
-    <string name="action_settings">Finalizar pedido</string>
+    <string name="finalizarPed">Finalizar pedido</string>
     <string name="fabEnCurso">Pedidos en curso</string>
     <string name="fabFinalizados">Pedidos finalizados</string>
     <string name="listaOrdenes">Lista de pedidos</string>
@@ -11,4 +11,19 @@
     <string name="permisosYES">Permisos de ubicación aceptados.</string>
     <string name="permisosNO">Permisos de ubicación denegados. Debes aceptarlos para usar la aplicación.</string>
     <string name="rechazarPedido">¿Seguro que quiéres rechazar este pedido?</string>
+    <string name="pedidoAceptado">Has aceptado el pedido. Puedes volver a consultarlo en \"Pedidos en curso\".</string>
+    <string name="pedidoFinalizado">Has finalizado el pedido. Puedes volver a consultarlo en \"Pedidos finalizados\".</string>
+    <string name="pedFinalizado">Pedido finalizado</string>
+    <string name="pedEnCurso">Pedido en curso...</string>
+    <string name="pedEnEspera">¡Pedido en espera!</string>
+    <string name="fecha">Fecha:\u0020</string>
+    <string name="cliente">Cliente:\u0020</string>
+    <string name="direccion">Dirección:\u0020</string>
+    <string name="fechaDetalles">Fecha del pedido:</string>
+    <string name="clienteDetalles">Nombre del cliente:</string>
+    <string name="orden">Orden:</string>
+    <string name="ubicacionCliente">Ubicación del cliente</string>
+    <string name="detallesPedido">Detalles del pedido</string>
+    <string name="aceptarPed">Aceptar pedido</string>
+    <string name="aceptarFinPed">¿Seguro que quiéres finalizar este pedido?</string>
 </resources>

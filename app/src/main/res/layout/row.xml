@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="#FABF2F"
         android:gravity="center"
-        android:text="¡Pedido en espera!"
+        android:text="@string/pedEnEspera"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Fecha: "
+            android:text="@string/fecha"
             android:textColor="#4825ba"
             android:textSize="15sp" />
 
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Cliente: "
+            android:text="@string/cliente"
             android:textColor="#4825ba"
             android:textSize="15sp" />
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Dirección: "
+            android:text="@string/direccion"
             android:textColor="#4825ba"
             android:textSize="15sp" />
 
