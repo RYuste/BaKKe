@@ -84,7 +84,7 @@ public class Repositorio {
 
         /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden, estado) " +
                 "VALUES('02/11/1995', 'Fulanito de Copas', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
-                "para ver como que de largo y todo eso, to wapo, aver, jaja, xd.', 0)");*/
+                "para ver como que de largo y todo eso, dfgdf gdf gdf gdf gdf gd fg dfkgdfkdkgdfgkdf gdkf gk, jaja soy ío.', 0)");*/
 
         // Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {

@@ -76,7 +76,7 @@
 
             <TextView
                 android:id="@+id/textView_fechaPedidoText"
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
@@ -101,7 +101,7 @@
 
             <TextView
                 android:id="@+id/textView_clienteText"
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20px"
                 android:layout_marginRight="20px"
@@ -176,7 +176,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="5dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -194,6 +194,7 @@
                     android:id="@+id/mapView"
                     android:layout_width="328dp"
                     android:layout_height="331dp"
+                    android:layout_marginBottom="5dp"
                     tools:layout_editor_absoluteX="76dp"
                     tools:layout_editor_absoluteY="283dp" />
 

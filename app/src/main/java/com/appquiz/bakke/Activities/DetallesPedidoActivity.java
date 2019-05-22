@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.appquiz.bakke.Constants;
 import com.appquiz.bakke.MyLog;
 import com.appquiz.bakke.Model.Pedido;
 import com.appquiz.bakke.R;
@@ -37,16 +37,12 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
     private Pedido pedidoID;
     private int estado;
 
-    private boolean okFinalizar;
-
     private ImageButton btn_atras;
     private TextView fecha, cliente, direccion, orden;
-
     private Button aceptarPedido, finalizarPedido, rechazarPedido;
 
     private MapView mapa;
     private GoogleMap gMap;
-    private static final String MAP_VIEW_BUNDLE_KEY = "google_maps_key";
 
     /**
      * Acción al pulsar el botón del dispositivo keyDown
@@ -153,7 +149,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         // Crea el mapView para mostrar el mapa
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAP_VIEW_BUNDLE_KEY);
+            mapViewBundle = savedInstanceState.getBundle(Constants.MAP_VIEW_BUNDLE_KEY);
         }
         mapa.onCreate(mapViewBundle);
         mapa.getMapAsync(this);
@@ -244,16 +240,15 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 estado = 1;
                 Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
 
-                Snackbar.make(v, R.string.pedidoAceptado, Snackbar.LENGTH_LONG)
+                Snackbar.make(v, R.string.pedidoAceptado, Snackbar.LENGTH_INDEFINITE)
                         .setActionTextColor(getResources().getColor(R.color.colorSecond))
                         .setAction("Ok", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                finish();
+                                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
                             }
                         }).show();
-
-                esperarYCerrar();
-                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
             }
         });
 
@@ -266,16 +261,15 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
                 estado = 2;
                 Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));
 
-                Snackbar.make(v, R.string.pedidoFinalizado, Snackbar.LENGTH_LONG)
+                Snackbar.make(v, R.string.pedidoFinalizado, Snackbar.LENGTH_INDEFINITE)
                         .setActionTextColor(getResources().getColor(R.color.colorSecond))
                         .setAction("Ok", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                finish();
+                                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
                             }
                         }).show();
-
-                esperarYCerrar();
-                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
             }
         });
 
@@ -289,19 +283,6 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         });
 
         MyLog.d(TAG, "Cerrando onResume...");
-    }
-
-    /**
-     * Espera y cierra la actividad tras los milisegundos indicados
-     */
-    public void esperarYCerrar() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // acciones que se ejecutan tras los milisegundos
-                finish();
-            }
-        }, 3000);
     }
 
     @Override

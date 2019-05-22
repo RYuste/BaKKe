@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.appquiz.bakke.Adapters.PedidosAdapter;
 import com.appquiz.bakke.Adapters.PedidosEnCursoAdapter;
 import com.appquiz.bakke.Model.Pedido;
 import com.appquiz.bakke.Model.Repositorio;

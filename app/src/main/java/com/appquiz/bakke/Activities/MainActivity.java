@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionMenu fabMenu;
     public ImageButton btn_exit;
 
+    private RequestQueue requestQueue;
+
     @Override
     /**
      * Muestra el AlertDialog al pulsar el botón del dispositivo keyDown
@@ -117,35 +119,41 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Invoca al servicio REST llamando al JSON
      */
-    private void invocarServicio(){
-        String DATA_URL = "http://192.168.1.35/BaKKeJSON/pedidos.json"; // http://192.168.102.87:3000/pedidos
+    private ArrayList<Pedido> invocarServicio(){
+        requestQueue = Volley.newRequestQueue(this);
+        final ArrayList<Pedido> pedidoJSON = new ArrayList<Pedido>();
 
         final ProgressDialog loading = ProgressDialog.show(this, "Actualizando pedidos", "Cargando...", false, false);
 
         // Método de la libreria Volley
         JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.GET,
-                DATA_URL, null,
+                Constants.DATA_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
                         try{
-                            loading.dismiss();
+                            JSONArray listaJSON = response.optJSONArray("repartidor");
 
-                            ArrayList<String> pedidoJSON = new ArrayList<String>();
-                            JSONArray lista = response.optJSONArray("pedidos");
+                            for (int i=0; i<listaJSON.length(); i++){
+                                JSONObject json_data = listaJSON.getJSONObject(i);
 
-                            for (int i=0; i<lista.length(); i++){
-                                JSONObject json_data = lista.getJSONObject(i);
-                                /*String pedido = json_data.getString("fecha") +" "+ json_data.getString("nombre") +" "+
-                                        json_data.getString("direccion") +" "+ json_data.getString("orden");
+                                Pedido p = new Pedido(
+                                        json_data.getInt("id"),
+                                        json_data.getString("fecha"),
+                                        json_data.getString("nombre"),
+                                        json_data.getDouble("latitud"),
+                                        json_data.getDouble("longitud"),
+                                        json_data.getString("direccion"),
+                                        json_data.getString("orden"),
+                                        json_data.getInt("estado"));
 
-                                pedidoJSON.add(pedido);*/
+                                pedidoJSON.add(p);
 
-                                /*Pedido p = new Pedido(json_data.getString("fecha"), json_data.getString("nombre"),
-                                        json_data.getString("direccion"), json_data.getString("orden"));
-
-                                Repositorio.getRepositorio().consultaAñadirPedido(p, myContext);*/
+                                /*
+                                COMO ALMACENARLO DE MANERA QUE LO RECORRA CON EL RECYCLER_VIEW SIN INSERTARLO EN LA BD
+                                */
                             }
+                            loading.dismiss();
                         }catch(JSONException error) {
                             Toast.makeText(getApplicationContext(), "Error JSON: " +error.getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -157,8 +165,9 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error request: " +error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(jsonObRq);
+
+        return pedidoJSON;
     }
 
     /**
@@ -230,8 +239,8 @@ public class MainActivity extends AppCompatActivity {
         // Almacenamos el contexto de la actividad para utilizar en las clases internas
         myContext = this;
 
-        //invocarServicio(); // Invocando al servicio REST
-
+        // Invocando al servicio REST que devuelve un ArrayList de pedidos de un json
+        //final ArrayList<Pedido> listaPedidos = invocarServicio();
         final ArrayList<Pedido> listaPedidos = Repositorio.getRepositorio().consultaListarPedidos(myContext);
 
         // Inicializa el RecyclerView

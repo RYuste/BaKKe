@@ -9,7 +9,7 @@
         android:id="@+id/TextView_enunciado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorDisabledPressed"
+        android:background="#2B2A2A"
         android:gravity="center"
         android:text="@string/pedFinalizado"
         android:textColor="@color/colorSecond"
