@@ -1,6 +1,7 @@
 package com.appquiz.bakke.Activities;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public ImageButton btn_exit;
 
     private RequestQueue requestQueue;
+    private NotificationCompat.Builder noti;
 
     @Override
     /**
@@ -126,32 +131,33 @@ public class MainActivity extends AppCompatActivity {
         final ProgressDialog loading = ProgressDialog.show(this, "Actualizando pedidos", "Cargando...", false, false);
 
         // Método de la libreria Volley
-        JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.GET,
+        JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.PUT,
                 Constants.DATA_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
                         try{
-                            JSONArray listaJSON = response.optJSONArray("repartidor");
+                            JSONArray listaJSON = response.optJSONArray("envio");
 
                             for (int i=0; i<listaJSON.length(); i++){
                                 JSONObject json_data = listaJSON.getJSONObject(i);
 
+                                JSONObject jsonCliente = (JSONObject) json_data.get("envio");
+
                                 Pedido p = new Pedido(
                                         json_data.getInt("id"),
-                                        json_data.getString("fecha"),
-                                        json_data.getString("nombre"),
-                                        json_data.getDouble("latitud"),
-                                        json_data.getDouble("longitud"),
-                                        json_data.getString("direccion"),
-                                        json_data.getString("orden"),
+                                        json_data.getString("fechaEnvio"),
+                                        jsonCliente.getString("nombre"),
+                                        json_data.getDouble("latitudOrigen"),
+                                        json_data.getDouble("longitudOrigen"),
+                                        json_data.getDouble("latitudDestino"),
+                                        json_data.getDouble("longitudDestino"),
+                                        jsonCliente.getString("direccionOrigen"),
+                                        jsonCliente.getString("direccionDestino"),
+                                        json_data.getString("detalles"),
                                         json_data.getInt("estado"));
 
                                 pedidoJSON.add(p);
-
-                                /*
-                                COMO ALMACENARLO DE MANERA QUE LO RECORRA CON EL RECYCLER_VIEW SIN INSERTARLO EN LA BD
-                                */
                             }
                             loading.dismiss();
                         }catch(JSONException error) {
@@ -164,7 +170,17 @@ public class MainActivity extends AppCompatActivity {
                         loading.dismiss();
                         Toast.makeText(getApplicationContext(), "Error request: " +error.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                });
+                }){
+                    @Override
+                    protected Map<String, String> getParams()
+                    {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("latitud", String.valueOf(34.45453));
+                        params.put("longitud", String.valueOf(-4.56657));
+
+                        return params;
+                    }
+                };
         requestQueue.add(jsonObRq);
 
         return pedidoJSON;
@@ -234,7 +250,8 @@ public class MainActivity extends AppCompatActivity {
         MyLog.d(TAG, "Iniciando onResume...");
         super.onResume();
 
-        permisosUbicacion(); // Si se niegan los permisos se cierra la app
+        // Si se niegan los permisos se cierra la app
+        permisosUbicacion();
 
         // Almacenamos el contexto de la actividad para utilizar en las clases internas
         myContext = this;
@@ -250,11 +267,31 @@ public class MainActivity extends AppCompatActivity {
         // Si la Base de Datos está vacía devuelve true, sino false
         boolean DB_Vacia = Repositorio.getRepositorio().checkEmpty(myContext);
 
+        // Notificación de pedido
+        noti = new NotificationCompat.Builder(this, "channelID");
+
         if(DB_Vacia == false){
             // Asocia el elemento de la lista con una acción al ser pulsado
             adaptador.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    noti.setAutoCancel(true);
+                    noti.setSmallIcon(R.drawable.orden);
+                    noti.setTicker("¡Tienes un pedido de BaKKe!");
+                    noti.setPriority(NotificationCompat.PRIORITY_HIGH);
+                    noti.setWhen(System.currentTimeMillis());
+                    noti.setContentTitle("Notificación de pedido");
+                    noti.setContentText("Tienes un pedido en espera...");
+
+                    //Intent intint = new Intent(MainActivity.this, MainActivity.class);
+                    //noti.setContentIntent(PendingIntent.getActivity(MainActivity.this, 0, intint, PendingIntent.FLAG_UPDATE_CURRENT));
+
+                    NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    nm.notify(54321, noti.build());
+
+                /*--------------------------------------------------------------------------------------------------------------*/
+
                     // Acción al pulsar el elemento
                     int position = recyclerView.getChildAdapterPosition(v);
 

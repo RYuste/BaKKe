@@ -3,6 +3,7 @@ package com.appquiz.bakke.Activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class DetallesPedidoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -95,7 +98,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
 
             fecha.setText(pedidoID.getFecha());
             cliente.setText(pedidoID.getNombre());
-            direccion.setText(pedidoID.getDireccion());
+            direccion.setText(pedidoID.getDireccionCliente());
             orden.setText(pedidoID.getOrden());
 
             // Dependiendo del estado habilita unos botones u otros
@@ -159,20 +162,28 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
 
     @Override
     /**
-     * Crea la ubicación en el mapView mediante latitud y longitud
+     * Crea las ubicaciones en el mapView mediante latitud y longitud
      */
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
-        gMap.setMinZoomPreference(14);
+        gMap.setMinZoomPreference(12);
 
-        LatLng ubicacion = new LatLng(pedidoID.getLatitud(), pedidoID.getLongitud());
+        LatLng ubicacionCliente = new LatLng(pedidoID.getLatitudCliente(), pedidoID.getLongitudCliente());
+        LatLng ubicacionProducto = new LatLng(pedidoID.getLatitudProducto(), pedidoID.getLongitudProducto());
 
-        gMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacion));
+        gMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacionCliente));
+
         gMap.addMarker(new MarkerOptions()
-                .position(ubicacion)
-                .title(pedidoID.getDireccion())
+                .position(ubicacionCliente)
+                .title("Cliente: "+pedidoID.getDireccionCliente())
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
 
+        gMap.addMarker(new MarkerOptions()
+                .position(ubicacionProducto)
+                .title("Producto: "+pedidoID.getDireccionProducto())
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+
+        // Botón de zoom
         gMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
@@ -257,6 +268,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         finalizarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Modifica el estado del pedido para almacenarlo en Pedidos Finalizados (2)
                 estado = 2;
                 Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, bundle.getInt("ID"));

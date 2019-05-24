@@ -8,9 +8,12 @@ public class Pedido {
     private int id;
     private String fecha;
     private String nombre;
-    private double latitud;
-    private double longitud;
-    private String direccion;
+    private double latitudCliente;
+    private double longitudCliente;
+    private double latitudProducto;
+    private double longitudProducto;
+    private String direccionCliente;
+    private String direccionProducto;
     private String orden;
     private int estado; // 0 por defecto, 1 en curso, 2 finalizado, 3 rechazado
 
@@ -20,17 +23,26 @@ public class Pedido {
      * @param id
      * @param fecha
      * @param nombre
-     * @param direccion
+     * @param latitudCliente
+     * @param longitudCliente
+     * @param latitudProducto
+     * @param longitudProducto
+     * @param direccionCliente
+     * @param direccionProducto
      * @param orden
      * @param estado
      */
-    public Pedido(int id, String fecha, String nombre, double latitud, double longitud, String direccion, String orden, int estado) {
+    public Pedido(int id, String fecha, String nombre, double latitudCliente, double longitudCliente,
+                  double latitudProducto, double longitudProducto, String direccionCliente, String direccionProducto, String orden, int estado) {
         this.id = id;
         this.fecha = fecha;
         this.nombre = nombre;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.direccion= direccion;
+        this.latitudCliente = latitudCliente;
+        this.longitudCliente = longitudCliente;
+        this.latitudProducto = latitudProducto;
+        this.longitudProducto = longitudProducto;
+        this.direccionCliente= direccionCliente;
+        this.direccionProducto= direccionProducto;
         this.orden = orden;
         this.estado = estado;
     }
@@ -40,16 +52,25 @@ public class Pedido {
      *
      * @param fecha
      * @param nombre
-     * @param direccion
+     * @param latitudCliente
+     * @param longitudCliente
+     * @param latitudProducto
+     * @param longitudProducto
+     * @param direccionCliente
+     * @param direccionProducto
      * @param orden
      * @param estado
      */
-    public Pedido(String fecha, String nombre, double latitud, double longitud, String direccion, String orden, int estado) {
+    public Pedido(String fecha, String nombre, double latitudCliente, double longitudCliente,
+                  double latitudProducto, double longitudProducto, String direccionCliente, String direccionProducto, String orden, int estado) {
         this.fecha = fecha;
         this.nombre = nombre;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.direccion= direccion;
+        this.latitudCliente = latitudCliente;
+        this.longitudCliente = longitudCliente;
+        this.latitudProducto = latitudProducto;
+        this.longitudProducto = longitudProducto;
+        this.direccionCliente= direccionCliente;
+        this.direccionProducto= direccionProducto;
         this.orden = orden;
         this.estado = estado;
     }
@@ -75,25 +96,46 @@ public class Pedido {
         this.nombre = nombre;
     }
 
-    public double getLatitud() {
-        return latitud;
+    public double getLatitudCliente() {
+        return latitudCliente;
     }
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
-
-    public double getLongitud() {
-        return longitud;
-    }
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
+    public void setLatitudCliente(double latitudCliente) {
+        this.latitudCliente = latitudCliente;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public double getLongitudCliente() {
+        return longitudCliente;
     }
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setLongitudCliente(double longitudCliente) {
+        this.longitudCliente = longitudCliente;
+    }
+
+    public double getLatitudProducto() {
+        return latitudProducto;
+    }
+    public void setLatitudProducto(double latitudProducto) {
+        this.latitudProducto = latitudProducto;
+    }
+
+    public double getLongitudProducto() {
+        return longitudProducto;
+    }
+    public void setLongitudProducto(double longitudProducto) {
+        this.longitudProducto = longitudProducto;
+    }
+
+    public String getDireccionCliente() {
+        return direccionCliente;
+    }
+    public void setDireccionCliente(String direccionCliente) {
+        this.direccionCliente = direccionCliente;
+    }
+
+    public String getDireccionProducto() {
+        return direccionProducto;
+    }
+    public void setDireccionProducto(String direccionProducto) {
+        this.direccionProducto = direccionProducto;
     }
 
     public String getOrden() {

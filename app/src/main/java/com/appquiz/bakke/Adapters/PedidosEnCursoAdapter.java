@@ -43,7 +43,7 @@ public class PedidosEnCursoAdapter extends RecyclerView.Adapter<PedidosEnCursoAd
         public void PedidoEnCursoBind(Pedido item) {
             nombre.setText(item.getNombre());
             fecha.setText(item.getFecha());
-            direccion.setText(item.getDireccion());
+            direccion.setText(item.getDireccionCliente());
         }
     }
 

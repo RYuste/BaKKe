@@ -82,8 +82,8 @@ public class Repositorio {
 
         Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
 
-        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitud, longitud, direccion, orden, estado) " +
-                "VALUES('02/11/1995', 'Fulanito de Copas', 37.6479943, -4.7074993, 'c/ Manuel Caracuel - Nº48', 'Esto es una prueba de una orden" +
+        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitudCliente, longitudCliente, latitudProducto, longitudProducto, direccionCliente, direccionProducto, orden, estado) " +
+                "VALUES('02/11/1995', 'Fulanito de Copas', 37.6479943, -4.7074993, 37.6673204, -4.7260106, 'c/ Manuel Caracuel, 48', 'c/ Dr. Miguel Servet, 29', 'Esto es una prueba de una orden" +
                 "para ver como que de largo y todo eso, dfgdf gdf gdf gdf gdf gd fg dfkgdfkdkgdfgkdf gdkf gk, jaja soy ío.', 0)");*/
 
         // Nos aseguramos de que existe al menos un registro
@@ -95,13 +95,17 @@ public class Repositorio {
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
-                double latitud = c.getDouble(c.getColumnIndex("latitud"));
-                double longitud = c.getDouble(c.getColumnIndex("longitud"));
-                String direccion = c.getString(c.getColumnIndex("direccion"));
+                double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
+                double longitudCliente = c.getDouble(c.getColumnIndex("longitudCliente"));
+                double latitudProducto = c.getDouble(c.getColumnIndex("latitudProducto"));
+                double longitudProducto = c.getDouble(c.getColumnIndex("longitudProducto"));
+                String direccionCliente = c.getString(c.getColumnIndex("direccionCliente"));
+                String direccionProducto = c.getString(c.getColumnIndex("direccionProducto"));
                 String orden = c.getString(c.getColumnIndex("orden"));
                 int estado = c.getInt(c.getColumnIndex("estado"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitud, longitud, direccion, orden, estado);
+                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                        direccionCliente, direccionProducto, orden, estado);
 
                 if(estado == 0){
                     listaPedidos.add(p);
@@ -137,13 +141,17 @@ public class Repositorio {
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
-                double latitud = c.getDouble(c.getColumnIndex("latitud"));
-                double longitud = c.getDouble(c.getColumnIndex("longitud"));
-                String direccion = c.getString(c.getColumnIndex("direccion"));
+                double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
+                double longitudCliente = c.getDouble(c.getColumnIndex("longitudCliente"));
+                double latitudProducto = c.getDouble(c.getColumnIndex("latitudProducto"));
+                double longitudProducto = c.getDouble(c.getColumnIndex("longitudProducto"));
+                String direccionCliente = c.getString(c.getColumnIndex("direccionCliente"));
+                String direccionProducto = c.getString(c.getColumnIndex("direccionProducto"));
                 String orden = c.getString(c.getColumnIndex("orden"));
                 int estado = c.getInt(c.getColumnIndex("estado"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitud, longitud, direccion, orden, estado);
+                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                        direccionCliente, direccionProducto, orden, estado);
 
                 if(estado == 1){
                     listaPedidosEnCurso.add(p);
@@ -179,13 +187,17 @@ public class Repositorio {
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
-                double latitud = c.getDouble(c.getColumnIndex("latitud"));
-                double longitud = c.getDouble(c.getColumnIndex("longitud"));
-                String direccion = c.getString(c.getColumnIndex("direccion"));
+                double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
+                double longitudCliente = c.getDouble(c.getColumnIndex("longitudCliente"));
+                double latitudProducto = c.getDouble(c.getColumnIndex("latitudProducto"));
+                double longitudProducto = c.getDouble(c.getColumnIndex("longitudProducto"));
+                String direccionCliente = c.getString(c.getColumnIndex("direccionCliente"));
+                String direccionProducto = c.getString(c.getColumnIndex("direccionProducto"));
                 String orden = c.getString(c.getColumnIndex("orden"));
                 int estado = c.getInt(c.getColumnIndex("estado"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitud, longitud, direccion, orden, estado);
+                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                        direccionCliente, direccionProducto, orden, estado);
 
                 if(estado == 2){
                     listaPedidosFinalizados.add(p);
@@ -217,13 +229,17 @@ public class Repositorio {
         if (c.moveToFirst()) {
             String fecha = c.getString(c.getColumnIndex("fecha"));
             String cliente = c.getString(c.getColumnIndex("nombre"));
-            double latitud = c.getDouble(c.getColumnIndex("latitud"));
-            double longitud = c.getDouble(c.getColumnIndex("longitud"));
-            String direccion = c.getString(c.getColumnIndex("direccion"));
+            double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
+            double longitudCliente = c.getDouble(c.getColumnIndex("longitudCliente"));
+            double latitudProducto = c.getDouble(c.getColumnIndex("latitudProducto"));
+            double longitudProducto = c.getDouble(c.getColumnIndex("longitudProducto"));
+            String direccionCliente = c.getString(c.getColumnIndex("direccionCliente"));
+            String direccionProducto = c.getString(c.getColumnIndex("direccionProducto"));
             String orden = c.getString(c.getColumnIndex("orden"));
             int estado = c.getInt(c.getColumnIndex("estado"));
 
-            p = new Pedido(fecha, cliente, latitud, longitud, direccion, orden, estado);
+            p = new Pedido(fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                    direccionCliente, direccionProducto, orden, estado);
         }
         db.close();
         MyLog.d(TAG, "Saliendo del método consultaListarPedidoID...");

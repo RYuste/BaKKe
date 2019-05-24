@@ -43,7 +43,7 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
         public void PedidoBind(Pedido item) {
             nombre.setText(item.getNombre());
             fecha.setText(item.getFecha());
-            direccion.setText(item.getDireccion());
+            direccion.setText(item.getDireccionCliente());
         }
     }
 

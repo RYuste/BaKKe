@@ -13,5 +13,5 @@ public class Constants {
 
     public static final String MAP_VIEW_BUNDLE_KEY = "google_maps_key";
 
-    public static final String DATA_URL = "https://repartotest.herokuapp.com/repartidor";
+    public static final String DATA_URL = "https://repartotest.herokuapp.com/envio";
 }

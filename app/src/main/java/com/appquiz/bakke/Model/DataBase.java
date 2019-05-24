@@ -12,7 +12,8 @@ public class DataBase extends SQLiteOpenHelper {
 
     // Sentencia SQL para crear la tabla Pedido
     String sqlCreate = "CREATE TABLE Pedido (id_pedido INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, fecha TEXT, nombre TEXT, " +
-            "latitud DOUBLE, longitud DOUBLE, direccion TEXT, orden TEXT, estado INTEGER)";
+            "latitudCliente DOUBLE, longitudCliente DOUBLE, latitudProducto DOUBLE, longitudProducto DOUBLE," +
+            " direccionCliente TEXT, direccionProducto TEXT, orden TEXT, estado INTEGER)";
 
     /**
      * Constructor

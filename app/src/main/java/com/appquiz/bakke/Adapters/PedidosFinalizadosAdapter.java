@@ -43,7 +43,7 @@ public class PedidosFinalizadosAdapter extends RecyclerView.Adapter<PedidosFinal
         public void PedidoFinalizadoBind(Pedido item) {
             nombre.setText(item.getNombre());
             fecha.setText(item.getFecha());
-            direccion.setText(item.getDireccion());
+            direccion.setText(item.getDireccionCliente());
         }
     }
 
