@@ -1,8 +1,10 @@
 package com.appquiz.bakke.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -15,12 +17,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.appquiz.bakke.Adapters.PedidosAdapter;
 import com.appquiz.bakke.Constants;
-import com.appquiz.bakke.MyLog;
 import com.appquiz.bakke.Model.Pedido;
-import com.appquiz.bakke.R;
 import com.appquiz.bakke.Model.Repositorio;
+import com.appquiz.bakke.MyLog;
+import com.appquiz.bakke.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,17 +39,32 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class DetallesPedidoActivity extends AppCompatActivity implements OnMapReadyCallback {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    private String TAG = "DetallesPedidoActivity";
+public class DetallesActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private String TAG = "DetallesActivity";
     private Context myContext;
-    private Bundle bundle;
-    private Pedido pedidoID;
+    private RequestQueue requestQueue;
+
+    private Intent intent;
+    private int id_pedido;
+    private String fecha;
+    private String nombre;
+    private double latCliente;
+    private double lonCliente;
+    private double latProducto;
+    private double lonProducto;
+    private String dirCliente;
+    private String dirProdcuto;
+    private String orden;
     private int estado;
 
     private ImageButton btn_atras;
-    private TextView fecha, cliente, direccion, orden;
-    private Button finalizarPedido, rechazarPedido;
+    private TextView fechaTextView, clienteTextView, direccionTextView, ordenTextView;
+    private Button aceptarPedido, rechazarPedido;
 
     private MapView mapa;
     private GoogleMap gMap;
@@ -64,7 +89,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         MyLog.d(TAG, "Iniciando onCreate...");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalles_pedido);
+        setContentView(R.layout.activity_detalles);
 
         btn_atras = findViewById(R.id.imageButton_atras);
         btn_atras.setOnClickListener(new View.OnClickListener() {
@@ -80,52 +105,34 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         // Almacenamos el contexto de la actividad para utilizar en las clases internas
         myContext = this;
 
-        // Recuperamos la información pasada en el intent
-        bundle = this.getIntent().getExtras();
+        // Recuperamos el intent que lo llamó
+        intent = getIntent();
+        id_pedido = intent.getIntExtra(Constants.EXTRA_ID, 0);
+        fecha = intent.getStringExtra(Constants.EXTRA_FECHA);
+        nombre = intent.getStringExtra(Constants.EXTRA_NOMBRE);
+        latCliente = intent.getDoubleExtra(Constants.EXTRA_LAT_CLIENTE, 0);
+        lonCliente = intent.getDoubleExtra(Constants.EXTRA_LON_CLIENTE, 0);
+        latProducto = intent.getDoubleExtra(Constants.EXTRA_LAT_PRODUCTO, 0);
+        lonProducto = intent.getDoubleExtra(Constants.EXTRA_LON_PRODUCTO, 0);
+        dirCliente = intent.getStringExtra(Constants.EXTRA_DIRC_CLIENTE);
+        dirProdcuto = intent.getStringExtra(Constants.EXTRA_DIRC_PRODUCTO);
+        orden = intent.getStringExtra(Constants.EXTRA_OREN);
 
-        fecha = (TextView) findViewById(R.id.textView_fechaPedidoText);
-        cliente = (TextView) findViewById(R.id.textView_clienteText);
-        direccion = (TextView) findViewById(R.id.textView_direccionText);
-        orden = (TextView) findViewById(R.id.textView_ordenText);
+        /*-------------------------------------------------------------------------------------------------------*/
+
+        fechaTextView = (TextView) findViewById(R.id.textView_fechaPedidoText);
+        clienteTextView = (TextView) findViewById(R.id.textView_clienteText);
+        direccionTextView = (TextView) findViewById(R.id.textView_direccionText);
+        ordenTextView = (TextView) findViewById(R.id.textView_ordenText);
+
         mapa = (MapView) findViewById(R.id.mapView);
+        /*-----------------------------------------------------------------*/
+        fechaTextView.setText(fecha);
+        clienteTextView.setText(nombre);
+        direccionTextView.setText(dirCliente);
+        ordenTextView.setText(orden);
 
-        // Si el bundle NO es null, rellena los campos de TextView con los datos del pedido
-        if (bundle != null) {
-            pedidoID = Repositorio.getRepositorio().consultaListarPedidoID(myContext, bundle.getInt("ID"));
-
-            fecha.setText(pedidoID.getFecha());
-            cliente.setText(pedidoID.getNombre());
-            direccion.setText(pedidoID.getDireccionCliente());
-            orden.setText(pedidoID.getOrden());
-
-            // Dependiendo del estado habilita unos botones u otros
-            estado = pedidoID.getEstado();
-
-            finalizarPedido = (Button) findViewById(R.id.button_finalizarPedido);
-            rechazarPedido = (Button) findViewById(R.id.button_rechazarPedido);
-
-            Drawable img = myContext.getResources().getDrawable(R.drawable.borrar_disabled);
-
-            // Pedido en Curso
-            if(estado == 1){
-                finalizarPedido.setEnabled(true);
-                finalizarPedido.setVisibility(View.VISIBLE);
-
-                rechazarPedido.setEnabled(false);
-                rechazarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
-                rechazarPedido.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-
-                // Pedido finalizado
-            }else if(estado == 2){
-                finalizarPedido.setEnabled(false);
-                finalizarPedido.setVisibility(View.VISIBLE);
-                finalizarPedido.setBackgroundTintList(getResources().getColorStateList(R.color.colorDisabled));
-                finalizarPedido.setTextColor(R.color.colorDisabledPressed);
-                finalizarPedido.setText(R.string.pedFinalizado);
-            }
-        }
-
-        /*--------------------------------------------------------*/
+        /*--------------------------------------------------------------------------------*/
 
         // Crea el mapView para mostrar el mapa
         Bundle mapViewBundle = null;
@@ -146,19 +153,19 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         gMap = googleMap;
         gMap.setMinZoomPreference(12);
 
-        LatLng ubicacionCliente = new LatLng(pedidoID.getLatitudCliente(), pedidoID.getLongitudCliente());
-        LatLng ubicacionProducto = new LatLng(pedidoID.getLatitudProducto(), pedidoID.getLongitudProducto());
+        LatLng ubicacionCliente = new LatLng(latCliente, lonCliente);
+        LatLng ubicacionProducto = new LatLng(latProducto, lonProducto);
 
         gMap.moveCamera(CameraUpdateFactory.newLatLng(ubicacionCliente));
 
         gMap.addMarker(new MarkerOptions()
                 .position(ubicacionCliente)
-                .title("Cliente: "+pedidoID.getDireccionCliente())
+                .title("Cliente: "+dirCliente)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
 
         gMap.addMarker(new MarkerOptions()
                 .position(ubicacionProducto)
-                .title("Producto: "+pedidoID.getDireccionProducto())
+                .title("Producto: "+dirProdcuto)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         // Botón de zoom
@@ -190,17 +197,22 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
         super.onResume();
         mapa.onResume();
 
-        // Finalizar Pedido
-        finalizarPedido = (Button) findViewById(R.id.button_finalizarPedido);
-        finalizarPedido.setOnClickListener(new View.OnClickListener() {
+        final Pedido pedido = new Pedido(id_pedido, fecha, nombre, latCliente, lonCliente, latProducto, lonProducto,
+                dirCliente, dirProdcuto, orden, estado);
+
+        // Aceptar Pedido
+        aceptarPedido = (Button) findViewById(R.id.button_aceptarPedido);
+        aceptarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // Modifica el estado del pedido para almacenarlo en Pedidos Finalizados (2)
-                estado = 2;
-                Repositorio.getRepositorio().consultaEstadoPedidoEnCurso(myContext, estado, bundle.getInt("ID"));
+                Repositorio.getRepositorio().consultaAñadirPedido(pedido, myContext);
 
-                Snackbar.make(v, R.string.pedidoFinalizado, Snackbar.LENGTH_INDEFINITE)
+                // Modifica el estado del pedido para almacenarlo en Pedidos en Curso (1)
+                estado = 1;
+                Repositorio.getRepositorio().consultaEstadoPedido(myContext, estado, id_pedido);
+
+                Snackbar.make(v, R.string.pedidoAceptado, Snackbar.LENGTH_INDEFINITE)
                         .setActionTextColor(getResources().getColor(R.color.colorSecond))
                         .setAction("Ok", new View.OnClickListener() {
                             @Override
@@ -212,41 +224,7 @@ public class DetallesPedidoActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        // Rechazar Pedido
-        rechazarPedido = (Button) findViewById(R.id.button_rechazarPedido);
-        rechazarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exit();
-            }
-        });
-
         MyLog.d(TAG, "Cerrando onResume...");
-    }
-
-    /**
-     * Muestra un AlerDialog para rechazar un pedido
-     */
-    public void exit(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(DetallesPedidoActivity.this);
-        builder.setMessage(R.string.rechazarPedido);
-
-        builder.setPositiveButton(R.string.confirmacion, new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                estado = 3;
-                Repositorio.getRepositorio().consultaEstadoPedidoEnCurso(myContext, estado, bundle.getInt("ID"));
-
-                finish();
-                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
-            }
-        }).setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
-        }).show(); //show alert dialog
     }
 
     @Override

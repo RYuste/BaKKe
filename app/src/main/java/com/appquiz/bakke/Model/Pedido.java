@@ -6,6 +6,7 @@ package com.appquiz.bakke.Model;
 public class Pedido {
 
     private int id;
+    private int id_pedido;
     private String fecha;
     private String nombre;
     private double latitudCliente;
@@ -15,12 +16,13 @@ public class Pedido {
     private String direccionCliente;
     private String direccionProducto;
     private String orden;
-    private int estado; // 0 por defecto, 1 en curso, 2 finalizado, 3 rechazado
+    private int estado; // 0 por defecto, 1 en curso, 2 finalizado
 
     /**
      * Constructor 1
      *
      * @param id
+     * @param id_pedido
      * @param fecha
      * @param nombre
      * @param latitudCliente
@@ -32,9 +34,10 @@ public class Pedido {
      * @param orden
      * @param estado
      */
-    public Pedido(int id, String fecha, String nombre, double latitudCliente, double longitudCliente,
+    public Pedido(int id, int id_pedido, String fecha, String nombre, double latitudCliente, double longitudCliente,
                   double latitudProducto, double longitudProducto, String direccionCliente, String direccionProducto, String orden, int estado) {
         this.id = id;
+        this.id_pedido = id_pedido;
         this.fecha = fecha;
         this.nombre = nombre;
         this.latitudCliente = latitudCliente;
@@ -50,6 +53,7 @@ public class Pedido {
     /**
      * Constructor 2
      *
+     * @param id_pedido
      * @param fecha
      * @param nombre
      * @param latitudCliente
@@ -61,8 +65,9 @@ public class Pedido {
      * @param orden
      * @param estado
      */
-    public Pedido(String fecha, String nombre, double latitudCliente, double longitudCliente,
+    public Pedido(int id_pedido, String fecha, String nombre, double latitudCliente, double longitudCliente,
                   double latitudProducto, double longitudProducto, String direccionCliente, String direccionProducto, String orden, int estado) {
+        this.id_pedido = id_pedido;
         this.fecha = fecha;
         this.nombre = nombre;
         this.latitudCliente = latitudCliente;
@@ -80,6 +85,13 @@ public class Pedido {
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId_pedido() {
+        return id_pedido;
+    }
+    public void setId_pedido(int id_pedido) {
+        this.id_pedido = id_pedido;
     }
 
     public String getFecha() {

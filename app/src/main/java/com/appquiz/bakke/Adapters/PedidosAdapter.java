@@ -1,5 +1,6 @@
 package com.appquiz.bakke.Adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,18 +18,36 @@ import java.util.ArrayList;
  * de los acontecimientos que va a mostrar
  * el RecyclerView
  */
-public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoViewHolder>
-        implements View.OnClickListener{
+public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoViewHolder> {
 
+    private Context myContext;
     private ArrayList<Pedido> items;
-    private View.OnClickListener listener;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
+
+    /**
+     * Contruye el objeto adaptador recibiendo la lista de datos
+     *
+     * @param myContext
+     * @param items
+     */
+    public PedidosAdapter(Context myContext, @NonNull ArrayList<Pedido> items) {
+        this.myContext = myContext;
+        this.items = items;
+    }
 
     /**
      * Clase interna:
      *  Se implementa el ViewHolder que se encargará
      *  de almacenar la vista del elemento y sus datos
      */
-    public static class PedidoViewHolder extends RecyclerView.ViewHolder {
+    public class PedidoViewHolder extends RecyclerView.ViewHolder {
         private TextView nombre;
         private TextView fecha;
         private TextView direccion;
@@ -38,6 +57,18 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
             nombre = (TextView) itemView.findViewById(R.id.TextView_nombre);
             fecha = (TextView) itemView.findViewById(R.id.TextView_fecha);
             direccion = (TextView) itemView.findViewById(R.id.TextView_direccion);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mListener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            mListener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
 
         public void PedidoBind(Pedido item) {
@@ -45,15 +76,6 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
             fecha.setText(item.getFecha());
             direccion.setText(item.getDireccionCliente());
         }
-    }
-
-    /**
-     * Contruye el objeto adaptador recibiendo la lista de datos
-     *
-     * @param items
-     */
-    public PedidosAdapter(@NonNull ArrayList<Pedido> items) {
-        this.items = items;
     }
 
     @NonNull
@@ -66,7 +88,6 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
     public PedidoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View row = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.row, viewGroup, false);
-        row.setOnClickListener(this);
 
         PedidoViewHolder pvh = new PedidoViewHolder(row);
         return pvh;
@@ -87,21 +108,6 @@ public class PedidosAdapter extends RecyclerView.Adapter<PedidosAdapter.PedidoVi
      */
     public int getItemCount() {
         return items.size();
-    }
-
-    /**
-     * Asigna un listener al elemento
-     *
-     * @param listener
-     */
-    public void setOnClickListener(View.OnClickListener listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if(listener != null)
-            listener.onClick(view);
     }
 
     /**

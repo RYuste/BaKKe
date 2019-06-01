@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 public class DataBase extends SQLiteOpenHelper {
 
     // Sentencia SQL para crear la tabla Pedido
-    String sqlCreate = "CREATE TABLE Pedido (id_pedido INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, fecha TEXT, nombre TEXT, " +
+    String sqlCreate = "CREATE TABLE Pedido (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, id_pedido INTEGER NOT NULL UNIQUE, fecha TEXT, nombre TEXT, " +
             "latitudCliente DOUBLE, longitudCliente DOUBLE, latitudProducto DOUBLE, longitudProducto DOUBLE," +
             " direccionCliente TEXT, direccionProducto TEXT, orden TEXT, estado INTEGER)";
 

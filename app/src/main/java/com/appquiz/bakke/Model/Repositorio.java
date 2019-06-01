@@ -69,56 +69,6 @@ public class Repositorio {
     }
 
     /**
-     * Añade todos los pedidos creados de la Base de Datos en un ArrayList y lo devuelve
-     *
-     * @param myContext
-     * @return listaPedidos
-     */
-    public ArrayList<Pedido> consultaListarPedidos(Context myContext){
-        MyLog.d(TAG, "Entrando en consultaListarPedidos...");
-
-        DataBase db = new DataBase(myContext, constants.DB_NOMBRE, null, 1);
-        SQLiteDatabase sqldb = db.getWritableDatabase();
-
-        Cursor c = sqldb.rawQuery(constants.DB_LISTAR_PEDIDOS, null);
-
-        /*sqldb.execSQL("INSERT INTO Pedido(fecha, nombre, latitudCliente, longitudCliente, latitudProducto, longitudProducto, direccionCliente, direccionProducto, orden, estado) " +
-                "VALUES('02/11/1995', 'Fulanito de Copas', 37.6479943, -4.7074993, 37.6673204, -4.7260106, 'c/ Manuel Caracuel, 48', 'c/ Dr. Miguel Servet, 29', 'Esto es una prueba de una orden" +
-                "para ver como que de largo y todo eso, dfgdf gdf gdf gdf gdf gd fg dfkgdfkdkgdfgkdf gdkf gk, jaja soy ío.', 0)");*/
-
-        // Nos aseguramos de que existe al menos un registro
-        if (c.moveToFirst()) {
-            listaPedidos.removeAll(listaPedidos);
-
-            // Recorremos el cursor hasta que no haya más registros
-            do {
-                int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
-                String fecha = c.getString(c.getColumnIndex("fecha"));
-                String cliente = c.getString(c.getColumnIndex("nombre"));
-                double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
-                double longitudCliente = c.getDouble(c.getColumnIndex("longitudCliente"));
-                double latitudProducto = c.getDouble(c.getColumnIndex("latitudProducto"));
-                double longitudProducto = c.getDouble(c.getColumnIndex("longitudProducto"));
-                String direccionCliente = c.getString(c.getColumnIndex("direccionCliente"));
-                String direccionProducto = c.getString(c.getColumnIndex("direccionProducto"));
-                String orden = c.getString(c.getColumnIndex("orden"));
-                int estado = c.getInt(c.getColumnIndex("estado"));
-
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
-                        direccionCliente, direccionProducto, orden, estado);
-
-                if(estado == 0){
-                    listaPedidos.add(p);
-                }
-            } while(c.moveToNext());
-        }
-        db.close();
-        MyLog.d(TAG, "Saliendo del método consultaListarPedidos...");
-
-        return listaPedidos;
-    }
-
-    /**
      * Añade todos los pedidos en curso creados de la Base de Datos en un ArrayList y lo devuelve
      *
      * @param myContext
@@ -138,6 +88,7 @@ public class Repositorio {
 
             // Recorremos el cursor hasta que no haya más registros
             do {
+                int id = c.getInt(c.getColumnIndex("id"));
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
@@ -150,7 +101,7 @@ public class Repositorio {
                 String orden = c.getString(c.getColumnIndex("orden"));
                 int estado = c.getInt(c.getColumnIndex("estado"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                Pedido p = new Pedido(id, id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
                         direccionCliente, direccionProducto, orden, estado);
 
                 if(estado == 1){
@@ -184,6 +135,7 @@ public class Repositorio {
 
             // Recorremos el cursor hasta que no haya más registros
             do {
+                int id = c.getInt(c.getColumnIndex("id"));
                 int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
                 String fecha = c.getString(c.getColumnIndex("fecha"));
                 String cliente = c.getString(c.getColumnIndex("nombre"));
@@ -196,7 +148,7 @@ public class Repositorio {
                 String orden = c.getString(c.getColumnIndex("orden"));
                 int estado = c.getInt(c.getColumnIndex("estado"));
 
-                Pedido p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+                Pedido p = new Pedido(id, id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
                         direccionCliente, direccionProducto, orden, estado);
 
                 if(estado == 2){
@@ -223,10 +175,11 @@ public class Repositorio {
         SQLiteDatabase sqldb = db.getWritableDatabase();
 
         Pedido p = null;
-        Cursor c = sqldb.rawQuery(" SELECT * FROM Pedido WHERE id_pedido = '"+id+"'", null);
+        Cursor c = sqldb.rawQuery(" SELECT * FROM Pedido WHERE id = '"+id+"'", null);
 
         //Nos aseguramos de que existe al menos un registro
         if (c.moveToFirst()) {
+            int id_pedido = c.getInt(c.getColumnIndex("id_pedido"));
             String fecha = c.getString(c.getColumnIndex("fecha"));
             String cliente = c.getString(c.getColumnIndex("nombre"));
             double latitudCliente = c.getDouble(c.getColumnIndex("latitudCliente"));
@@ -238,7 +191,7 @@ public class Repositorio {
             String orden = c.getString(c.getColumnIndex("orden"));
             int estado = c.getInt(c.getColumnIndex("estado"));
 
-            p = new Pedido(fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
+            p = new Pedido(id_pedido, fecha, cliente, latitudCliente, longitudCliente, latitudProducto, longitudProducto,
                     direccionCliente, direccionProducto, orden, estado);
         }
         db.close();
@@ -270,6 +223,52 @@ public class Repositorio {
     }
 
     /**
+     * Modifica el estado de un pedido
+     *
+     * @param myContext
+     * @param estado
+     */
+    public void consultaEstadoPedidoEnCurso(Context myContext, int estado, int id){
+        MyLog.d(TAG, "Entrando en EstadoPedido...");
+
+        DataBase db = new DataBase(myContext, constants.DB_NOMBRE, null, 1);
+        SQLiteDatabase sqldb = db.getWritableDatabase();
+
+        if(sqldb != null){
+            sqldb.execSQL("UPDATE Pedido SET estado = '"+estado+"' WHERE id = '"+id+"'");
+
+            MyLog.d(TAG, "Saliendo de EstadoPedido...");
+        }
+        db.close();
+
+        MyLog.d(TAG, "Saliendo del método EstadoPedido...");
+    }
+
+    /**
+     * Añade un pedido a la BD
+     *
+     * @param p
+     * @param myContext
+     */
+    public void consultaAñadirPedido(Pedido p, Context myContext){
+        DataBase db = new DataBase(myContext, constants.DB_NOMBRE, null, 1);
+        SQLiteDatabase sqldb = db.getWritableDatabase();
+
+        if(db != null){
+            sqldb.execSQL("INSERT INTO Pedido(id_pedido, fecha, nombre, latitudCliente, longitudCliente, latitudProducto, longitudProducto, direccionCliente," +
+                    "direccionProducto, orden, estado) " +
+                    "VALUES('"+p.getId_pedido()+"', '"+p.getFecha()+"', '"+p.getNombre()+"', '"+p.getLatitudCliente()+"', " +
+                    "'"+p.getLongitudCliente()+"', '"+p.getLatitudProducto()+"', '"+p.getLongitudProducto()+"', '"+p.getDireccionCliente()+"', " +
+                    "'"+p.getDireccionProducto()+"', '"+p.getOrden()+"', '"+p.getEstado()+"')");
+
+            MyLog.d(TAG, "Saliendo de AñadirPedido...");
+        }else {
+            MyLog.d(TAG, "Error null en AñadirPedido...");
+        }
+        db.close();
+    }
+
+    /**
      * Elimina un pedido por id
      *
      * @param myContext
@@ -282,7 +281,7 @@ public class Repositorio {
         SQLiteDatabase sqldb = db.getWritableDatabase();
 
         if(sqldb != null){
-            sqldb.execSQL("DELETE FROM Pedido WHERE id_pedido = '"+id+"'");
+            sqldb.execSQL("DELETE FROM Pedido WHERE id = '"+id+"'");
 
             MyLog.d(TAG, "Saliendo de EliminarPedido...");
         }

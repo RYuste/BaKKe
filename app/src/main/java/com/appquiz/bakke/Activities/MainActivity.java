@@ -39,20 +39,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements PedidosAdapter.OnItemClickListener {
     private String TAG = "MainActivity";
-    private Context myContext;
 
     FloatingActionMenu fabMenu;
-    public ImageButton btn_exit;
+    public ImageButton btn_exit, btn_recarga;
 
     private RequestQueue requestQueue;
-    private NotificationCompat.Builder noti;
+
+    private ArrayList<Pedido> listaPedidosJSON;
+    private RecyclerView recyclerView;
+    private PedidosAdapter adaptador;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     /**
@@ -78,6 +79,28 @@ public class MainActivity extends AppCompatActivity {
                 exit();
             }
         });
+
+        btn_recarga = findViewById(R.id.imageButton_recarga);
+        btn_recarga.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listaPedidosJSON.clear();
+                adaptador = new PedidosAdapter(MainActivity.this, listaPedidosJSON);
+                adaptador.notifyDataSetChanged();
+
+                invocarServicioGET();
+            }
+        });
+
+        // Si se niegan los permisos se cierra la app
+        permisosUbicacion();
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(layoutManager);
+
+        listaPedidosJSON = new ArrayList<>();
+        invocarServicioGET();
     }
 
     /**
@@ -124,66 +147,76 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Invoca al servicio REST llamando al JSON
      */
-    private ArrayList<Pedido> invocarServicio(){
+    private void invocarServicioGET(){
         requestQueue = Volley.newRequestQueue(this);
-        final ArrayList<Pedido> pedidoJSON = new ArrayList<Pedido>();
-
-        final ProgressDialog loading = ProgressDialog.show(this, "Actualizando pedidos", "Cargando...", false, false);
+        final ProgressDialog loading = ProgressDialog.show(this, getString(R.string.actualizarPedidos), getString(R.string.cargando), false, false);
 
         // Método de la libreria Volley
-        JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.PUT,
+        JsonObjectRequest jsonObRq = new JsonObjectRequest(Request.Method.GET,
                 Constants.DATA_URL, null,
                 new Response.Listener<JSONObject>(){
                     @Override
                     public void onResponse(JSONObject response) {
-                        try{
-                            JSONArray listaJSON = response.optJSONArray("envio");
+                       try {
+                            JSONArray listaJSON = response.getJSONArray("pedidos");
 
                             for (int i=0; i<listaJSON.length(); i++){
                                 JSONObject json_data = listaJSON.getJSONObject(i);
 
-                                JSONObject jsonCliente = (JSONObject) json_data.get("envio");
-
                                 Pedido p = new Pedido(
-                                        json_data.getInt("id"),
-                                        json_data.getString("fechaEnvio"),
-                                        jsonCliente.getString("nombre"),
-                                        json_data.getDouble("latitudOrigen"),
-                                        json_data.getDouble("longitudOrigen"),
-                                        json_data.getDouble("latitudDestino"),
-                                        json_data.getDouble("longitudDestino"),
-                                        jsonCliente.getString("direccionOrigen"),
-                                        jsonCliente.getString("direccionDestino"),
-                                        json_data.getString("detalles"),
+                                        json_data.getInt("id_pedido"),
+                                        json_data.getString("fecha"),
+                                        json_data.getString("nombre"),
+                                        json_data.getDouble("latitudCliente"),
+                                        json_data.getDouble("longitudCliente"),
+                                        json_data.getDouble("latitudProducto"),
+                                        json_data.getDouble("longitudProducto"),
+                                        json_data.getString("direccionCliente"),
+                                        json_data.getString("direccionProducto"),
+                                        json_data.getString("orden"),
                                         json_data.getInt("estado"));
 
-                                pedidoJSON.add(p);
+                                listaPedidosJSON.add(p);
                             }
+                            adaptador = new PedidosAdapter(MainActivity.this, listaPedidosJSON);
+                            recyclerView.setAdapter(adaptador);
+                            adaptador.setOnItemClickListener(MainActivity.this);
+
                             loading.dismiss();
-                        }catch(JSONException error) {
-                            Toast.makeText(getApplicationContext(), "Error JSON: " +error.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                       }catch(JSONException error) {
+                           loading.dismiss();
+                           Toast.makeText(getApplicationContext(), getString(R.string.errorJSON), Toast.LENGTH_SHORT).show();
+                       }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         loading.dismiss();
-                        Toast.makeText(getApplicationContext(), "Error request: " +error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.errorRequest), Toast.LENGTH_SHORT).show();
                     }
-                }){
-                    @Override
-                    protected Map<String, String> getParams()
-                    {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("latitud", String.valueOf(34.45453));
-                        params.put("longitud", String.valueOf(-4.56657));
 
-                        return params;
-                    }
-                };
+                });
         requestQueue.add(jsonObRq);
+    }
 
-        return pedidoJSON;
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(MainActivity.this, DetallesActivity.class);
+        Pedido clickedItem = listaPedidosJSON.get(position);
+
+        intent.putExtra(Constants.EXTRA_ID, clickedItem.getId_pedido());
+        intent.putExtra(Constants.EXTRA_FECHA, clickedItem.getFecha());
+        intent.putExtra(Constants.EXTRA_NOMBRE, clickedItem.getNombre());
+        intent.putExtra(Constants.EXTRA_LAT_CLIENTE, clickedItem.getLatitudCliente());
+        intent.putExtra(Constants.EXTRA_LON_CLIENTE, clickedItem.getLongitudCliente());
+        intent.putExtra(Constants.EXTRA_LAT_PRODUCTO, clickedItem.getLatitudProducto());
+        intent.putExtra(Constants.EXTRA_LON_PRODUCTO, clickedItem.getLongitudProducto());
+        intent.putExtra(Constants.EXTRA_DIRC_CLIENTE, clickedItem.getDireccionCliente());
+        intent.putExtra(Constants.EXTRA_DIRC_PRODUCTO, clickedItem.getDireccionProducto());
+        intent.putExtra(Constants.EXTRA_OREN, clickedItem.getOrden());
+        intent.putExtra(Constants.EXTRA_ESTADO, clickedItem.getEstado());
+
+        startActivity(intent);
     }
 
     /**
@@ -248,74 +281,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         MyLog.d(TAG, "Iniciando onResume...");
+
         super.onResume();
-
-        // Si se niegan los permisos se cierra la app
-        permisosUbicacion();
-
-        // Almacenamos el contexto de la actividad para utilizar en las clases internas
-        myContext = this;
-
-        // Invocando al servicio REST que devuelve un ArrayList de pedidos de un json
-        //final ArrayList<Pedido> listaPedidos = invocarServicio();
-        final ArrayList<Pedido> listaPedidos = Repositorio.getRepositorio().consultaListarPedidos(myContext);
-
-        // Inicializa el RecyclerView
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        // Crea el Adaptador con los datos de la lista anterior
-        final PedidosAdapter adaptador = new PedidosAdapter(listaPedidos);
-        // Si la Base de Datos está vacía devuelve true, sino false
-        boolean DB_Vacia = Repositorio.getRepositorio().checkEmpty(myContext);
-
-        // Notificación de pedido
-        noti = new NotificationCompat.Builder(this, "channelID");
-
-        if(DB_Vacia == false){
-            // Asocia el elemento de la lista con una acción al ser pulsado
-            adaptador.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    noti.setAutoCancel(true);
-                    noti.setSmallIcon(R.drawable.orden);
-                    noti.setTicker("¡Tienes un pedido de BaKKe!");
-                    noti.setPriority(NotificationCompat.PRIORITY_HIGH);
-                    noti.setWhen(System.currentTimeMillis());
-                    noti.setContentTitle("Notificación de pedido");
-                    noti.setContentText("Tienes un pedido en espera...");
-
-                    //Intent intint = new Intent(MainActivity.this, MainActivity.class);
-                    //noti.setContentIntent(PendingIntent.getActivity(MainActivity.this, 0, intint, PendingIntent.FLAG_UPDATE_CURRENT));
-
-                    NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    nm.notify(54321, noti.build());
-
-                /*--------------------------------------------------------------------------------------------------------------*/
-
-                    // Acción al pulsar el elemento
-                    int position = recyclerView.getChildAdapterPosition(v);
-
-                    Intent intent = new Intent(MainActivity.this, DetallesPedidoActivity.class);
-
-                    // Creamos la información a pasar entre actividades
-                    Bundle b = new Bundle();
-                    b.putInt("ID", listaPedidos.get(position).getId());
-
-                    // Añadimos la información al intent
-                    intent.putExtras(b);
-                    // Iniciamos la actividad
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out); // Traslación de la actividad
-                }
-            });
-
-            // Asocia el Adaptador al RecyclerView
-            recyclerView.setAdapter(adaptador);
-            // Muestra el RecyclerView en vertical
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        }else{
-            adaptador.borrarDatos();
-        }
 
         MyLog.d(TAG, "Cerrando onResume...");
     }

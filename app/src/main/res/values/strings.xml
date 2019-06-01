@@ -10,7 +10,7 @@
     <string name="title_activity_map">Ruta del Pedido</string>
     <string name="permisosYES">Permisos de ubicación aceptados.</string>
     <string name="permisosNO">Permisos de ubicación denegados. Debes aceptarlos para usar la aplicación.</string>
-    <string name="rechazarPedido">¿Seguro que quiéres rechazar este pedido?</string>
+    <string name="rechazarPedido">¿Seguro que quiéres eliminar este pedido?</string>
     <string name="pedidoAceptado">Has aceptado el pedido. Puedes volver a consultarlo en \"Pedidos en curso\".</string>
     <string name="pedidoFinalizado">Has finalizado el pedido. Puedes volver a consultarlo en \"Pedidos finalizados\".</string>
     <string name="pedFinalizado">Pedido finalizado</string>
@@ -26,4 +26,11 @@
     <string name="detallesPedido">Detalles del pedido</string>
     <string name="aceptarPed">Aceptar pedido</string>
     <string name="aceptarFinPed">¿Seguro que quiéres finalizar este pedido?</string>
+    <string name="actualizarPedidos">Actualizando pedidos</string>
+    <string name="cargando">Cargando...</string>
+    <string name="errorJSON">Imposible cargar los datos del pedido. Intentelo más tarde.</string>
+    <string name="errorRequest">Imposible conectar con el servidor. Intentelo más tarde.</string>
+    <string name="rechazarPedLoad">Rechazando pedido</string>
+    <string name="rechazarPed">Has rechazado el pedido.</string>
+    <string name="pedidoEliminado">Has eliminado el pedido.</string>
 </resources>
